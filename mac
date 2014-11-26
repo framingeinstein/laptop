@@ -160,6 +160,14 @@ fancy_echo "Installing watch, to execute a program periodically and show the out
 fancy_echo "Installing cask, for installing desktop applications from homebrew ..."
   brew tap caskroom/cask
   brew_install_or_upgrade 'brew-cask'
+<<<<<<< HEAD
+=======
+
+  brew cask install google-chrome
+
+fancy_echo "Installing Vagrant, for managing local environments ..."
+  brew_install_or_upgrade 'vagrant'
+>>>>>>> some updates for onboarding new machines
 
 fancy_echo "Installing Alfred, for quick-finding applications, files and others ..."
   brew_cask_install_or_upgrade alfred
@@ -202,6 +210,7 @@ fancy_echo "Upgrading and linking OpenSSL ..."
 
 fancy_echo "Installing Python..."
   brew_install_or_upgrade 'python'
+<<<<<<< HEAD
 
 fancy_echo "Installing Fabric for managing projects and environments ..."
   pip install fabric
@@ -209,6 +218,15 @@ fancy_echo "Installing Fabric for managing projects and environments ..."
 fancy_echo "Installing Virtualenv for handling python environments ..."
   pip install virtualenv virtualenvwrapper
 
+<<<<<<< HEAD
+=======
+=======
+
+fancy_echo "Installing fabric for managing projects and environments ..."
+  pip install fabric
+>>>>>>> some updates for onboarding new machines
+
+>>>>>>> some updates for onboarding new machines
 fancy_echo "Adding grunt for automated build tasks ..."
   npm install -g grunt-cli
 
