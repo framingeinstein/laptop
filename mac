@@ -209,7 +209,6 @@ fancy_echo "Installing Fabric for managing projects and environments ..."
 fancy_echo "Installing Virtualenv for handling python environments ..."
   pip install virtualenv virtualenvwrapper
 
-
 fancy_echo "Adding grunt for automated build tasks ..."
   npm install -g grunt-cli
 
