@@ -161,6 +161,9 @@ fancy_echo "Installing cask, for installing desktop applications from homebrew .
   brew tap caskroom/cask
   brew_install_or_upgrade 'brew-cask'
 
+fancy_echo "Installing Alfred, for quick-finding applications, files and others ..."
+  brew_cask_install_or_upgrade alfred
+
 fancy_echo "Installing Vagrant, for managing local virtual machines ..."
   brew_cask_install_or_upgrade vagrant
 
