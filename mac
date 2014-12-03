@@ -66,6 +66,36 @@ brew_cask_expand_alias() {
   brew cask info "$1" 2>/dev/null | head -1 | awk '{gsub(/:/, ""); print $1}'
 }
 
+if [[ "$SHELL" != */zsh ]]; then
+
+  brew_install_or_upgrade 'zsh'
+  brew_install_or_upgrade 'zsh-completions'
+
+  fancy_echo "Changing your shell to zsh ..."
+    chsh -s $(which zsh)
+fi
+
+brew_cask_install_or_upgrade(){
+  if brew_cask_is_installed "$1"; then
+    fancy_echo "Updating $1..."
+    brew cask update "$@"
+  else
+    fancy_echo "Installing $1..."
+    brew cask install "$@"
+  fi
+}
+
+brew_cask_is_installed() {
+  local name="$(brew_cask_expand_alias "$1")"
+
+  fancy_echo "$name"
+  brew cask list -1 | grep -Fqx "$name"
+}
+
+brew_cask_expand_alias() {
+  brew cask info "$1" 2>/dev/null | head -1 | awk '{gsub(/:/, ""); print $1}'
+}
+
 
 brew_install_or_upgrade() {
   if brew_is_installed "$1"; then
@@ -107,15 +137,6 @@ brew_launchctl_restart() {
   fi
   launchctl load "$HOME/Library/LaunchAgents/$plist" >/dev/null
 }
-
-if [[ "$SHELL" != */zsh ]]; then
-
-  brew_install_or_upgrade 'zsh'
-  brew_install_or_upgrade 'zsh-completions'
-
-  fancy_echo "Changing your shell to zsh ..."
-    chsh -s $(which zsh)
-fi
 
 if ! command -v brew >/dev/null; then
   fancy_echo "Installing Homebrew, a good OS X package manager ..."
