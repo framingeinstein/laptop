@@ -4,6 +4,8 @@
 # Be prepared to turn your laptop (or desktop, no haters here)
 # into an awesome development machine.
 
+ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+
 fancy_echo() {
   printf "\n%b\n" "$1"
 }
@@ -42,16 +44,6 @@ fi
 append_to_zshrc 'export PATH="$HOME/.bin:$PATH"'
 
 append_to_zshrc 'export HOMEBREW_CASK_OPTS="--appdir=/Applications"'
-
-if [[ "$SHELL" != */zsh ]]; then
-
-  brew_install_or_upgrade 'zsh'
-  brew_install_or_upgrade 'zsh-completions'
-
-  fancy_echo "Changing your shell to zsh ..."
-    chsh -s $(which zsh)
-fi
-
 
 brew_cask_install_or_upgrade(){
   if brew_cask_is_installed "$1"; then
@@ -115,6 +107,15 @@ brew_launchctl_restart() {
   fi
   launchctl load "$HOME/Library/LaunchAgents/$plist" >/dev/null
 }
+
+if [[ "$SHELL" != */zsh ]]; then
+
+  brew_install_or_upgrade 'zsh'
+  brew_install_or_upgrade 'zsh-completions'
+
+  fancy_echo "Changing your shell to zsh ..."
+    chsh -s $(which zsh)
+fi
 
 if ! command -v brew >/dev/null; then
   fancy_echo "Installing Homebrew, a good OS X package manager ..."
