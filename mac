@@ -4,8 +4,6 @@
 # Be prepared to turn your laptop (or desktop, no haters here)
 # into an awesome development machine.
 
-ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-
 fancy_echo() {
   printf "\n%b\n" "$1"
 }
@@ -29,7 +27,7 @@ append_to_zshrc() {
   fi
 }
 
-trap 'ret=$?; test $ret -ne 0 && printf "failed\n\n" >&2; exit $ret' EXIT
+trap 'ret=$?; test $ret -ne 0 && printf "\033[0;31mFailed to complete setup. \033[0m" >&2; printf "Please send the output of $HOME/laptop.log to team chat for help.\n\n" exit $ret' EXIT
 
 set -e
 
@@ -44,7 +42,7 @@ fi
 if [[ ! -e "$HOME/.zshenv" ]] && [[ ! -L "$HOME/.zshenv" ]]; then
   touch "$HOME/.zshenv"
 fi
-  
+
 append_to_zshrc 'export PATH="$HOME/.bin:$PATH"'
 
 append_to_zshrc 'export HOMEBREW_CASK_OPTS="--appdir=/Applications"'
@@ -122,6 +120,7 @@ brew_launchctl_restart() {
   launchctl load "$HOME/Library/LaunchAgents/$plist" >/dev/null
 }
 
+fancy_echo "\033[0;32mWelcome! Prepare to have your machine be setup for most awesome developmentness.\033[0m" 
 fancy_echo "Please provide your administator password to continue."
 sudo -v
 
