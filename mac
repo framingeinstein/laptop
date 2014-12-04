@@ -39,11 +39,12 @@ fi
 
 if [[ ! -e "$HOME/.zshrc" ]] && [[ ! -L "$HOME/.zshrc" ]]; then
   touch "$HOME/.zshrc"
-  if [[ ! -e "$HOME/.zshenv" ]] && [[ ! -L "$HOME/.zshenv" ]]; then
-    touch "$HOME/.zshenv"
-  fi
 fi
 
+if [[ ! -e "$HOME/.zshenv" ]] && [[ ! -L "$HOME/.zshenv" ]]; then
+  touch "$HOME/.zshenv"
+fi
+  
 append_to_zshrc 'export PATH="$HOME/.bin:$PATH"'
 
 append_to_zshrc 'export HOMEBREW_CASK_OPTS="--appdir=/Applications"'
