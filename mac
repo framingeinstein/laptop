@@ -165,31 +165,25 @@ fancy_echo "Installing cask, for installing desktop applications from homebrew .
   brew_install_or_upgrade 'brew-cask'
 
 fancy_echo "Installing Vagrant, for managing local virtual machines ..."
-  brew_cask_install_or_upgrade vagrant
+  brew_cask_install_or_upgrade 'vagrant'
 
 fancy_echo "Installing Virtualbox, for storing local virtual machines ..."
-  brew_cask_install_or_upgrade virtualbox
+  brew_cask_install_or_upgrade 'virtualbox'
 
 fancy_echo "Installing Alfred, for quick-finding applications, files and others ..."
-  brew_cask_install_or_upgrade alfred
-
-fancy_echo "Installing Vagrant, for managing local virtual machines ..."
-  brew_cask_install_or_upgrade vagrant
-
-fancy_echo "Installing Virtualbox, for storing local virtual machines ..."
-  brew_cask_install_or_upgrade virtualbox
+  brew_cask_install_or_upgrade 'alfred'
 
 fancy_echo "Installing Hipchat, for chatty-chatting ..."
-  brew_cask_install_or_upgrade hipchat
+  brew_cask_install_or_upgrade 'hipchat'
 
 fancy_echo "Installing Evernote, for note taking & sharing ..."
-  brew_cask_install_or_upgrade evernote
+  brew_cask_install_or_upgrade 'evernote'
 
 fancy_echo "Installing Sequal Pro, for MySQL database management ..."
-  brew_cask_install_or_upgrade sequel-pro
+  brew_cask_install_or_upgrade 'sequel-pro'
 
 fancy_echo "Installing Box Sync, for file syncing and management ..."
-  brew_cask_install_or_upgrade box-sync
+  brew_cask_install_or_upgrade 'box-sync'
 
 node_version="0.10.33"
 
@@ -218,6 +212,10 @@ fancy_echo "Installing Fabric for managing projects and environments ..."
 
 fancy_echo "Installing Virtualenv for handling python environments ..."
   pip install virtualenv virtualenvwrapper
+
+fancy_echo "Installing z, a command-line tool for quickly changing to often-used directories..."
+  brew_install_or_upgrade 'z'
+  append_to_zshrc 'source `brew --prefix`/etc/profile.d/z.sh'
 
 fancy_echo "Adding Grunt for automated build tasks ..."
   npm install -g grunt-cli
