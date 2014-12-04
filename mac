@@ -224,6 +224,23 @@ else
   fancy_echo "rcm already installed. Skipping ..."
 fi
 
+fancy_echo "Installing dotfiles..."
+
+cd $HOME
+git clone git://github.com/rallygroup/dotfiles.git $HOME/.dotfiles
+curl -L https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh | ZSH=~/.dotfiles/zsh sh
+
+env RCRC=$HOME/dotfiles/rcrc rcup -v
+
+if [[ ! -f $HOME/.bin/wp ]]; then
+  fancy_echo "Installing wp-cli, a WordPress command line interface..."
+
+  curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+
+  chmod +x wp-cli.phar
+  sudo mv wp-cli.phar $HOME/.bin/wp
+fi
+
 fancy_echo "Installing your personal additions from ~/.laptop.local ..."
   if [[ -f ~/.laptop.local ]]; then
     source ~/.laptop.local
