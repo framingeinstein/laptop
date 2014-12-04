@@ -27,7 +27,7 @@ append_to_zshrc() {
   fi
 }
 
-trap 'ret=$?; test $ret -ne 0 && printf "\033[0;31mFailed to complete setup. \033[0m" >&2; printf "Please send the output of $HOME/laptop.log to team chat for help.\n\n" exit $ret' EXIT
+trap 'ret=$?; test $ret -ne 0 && printf "\033[0;31mFailed to complete setup. \033[0m Please send the output of $HOME/laptop.log to team chat for help.\n\n" >&2; exit $ret' EXIT
 
 set -e
 
@@ -50,6 +50,20 @@ append_to_zshrc 'export HOMEBREW_CASK_OPTS="--appdir=/Applications"'
 fancy_echo "\033[0;32mWelcome! Prepare to have your machine be setup for most awesome developmentness.\033[0m" 
 fancy_echo "Please provide your administator password to continue."
 sudo -v
+
+if [[ ! -f $HOME/.ssh/id_rsa ]]; then
+  fancy_echo "Generating SSH key..."
+
+  eval "$(ssh-agent -s)"
+  ssh-keygen -t rsa -N "" -f  $HOME/.ssh/id_rsa
+fi
+
+fancy_echo "\033[0;32mBelow is your SSH key.  Please copy it to your clipboard and associate it with your Github account before continuing. \nFor help, see: \033[0;31mhttps://help.github.com/articles/generating-ssh-keys/#step-3-add-your-ssh-key-to-your-account\033[0m"
+
+printf "\n\033[0;32m$(cat $HOME/.ssh/id_rsa.pub)\n\n\n\033[0m"
+
+read -p "After making sure that this key has been added to Github, press the [Enter] key to continue ..."
+
 
 if [[ "$SHELL" != */zsh ]]; then
   fancy_echo "Changing your shell to zsh ..."
@@ -124,14 +138,6 @@ brew_launchctl_restart() {
   launchctl load "$HOME/Library/LaunchAgents/$plist" >/dev/null
 }
 
-fancy_echo "\033[0;32mWelcome! Prepare to have your machine be setup for most awesome developmentness.\033[0m" 
-fancy_echo "Please provide your administator password to continue."
-sudo -v
-
-fancy_echo "Generating SSH key..."
-if [[ ! -f $HOME/.ssh/id_rsa ]]; then
-  ssh-keygen -t rsa -N "" -f  $HOME/.ssh/id_rsa
-fi
 
 if ! command -v brew >/dev/null; then
   fancy_echo "Installing Homebrew, a good OS X package manager ..."
