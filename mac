@@ -260,7 +260,7 @@ if [[ ! -d "$HOME/.dotfiles/.git" ]]; then
   cd $HOME
 fi
 
-if [[ ! -d "$HOME/.dotfiles/zsh" ]]; then
+if [[ ! -f "$HOME/.dotfiles/zsh/oh-my-zsh.sh" ]]; then
   fancy_echo "Installing oh-my-zsh, a great zsh library"
   curl -L https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh | ZSH=~/.dotfiles/zsh sh
 fi
