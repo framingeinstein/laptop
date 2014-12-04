@@ -175,12 +175,6 @@ fancy_echo "Installing Alfred, for quick-finding applications, files and others 
 fancy_echo "Installing Hipchat, for chatty-chatting ..."
   brew_cask_install_or_upgrade 'hipchat'
 
-fancy_echo "Installing Evernote, for note taking & sharing ..."
-  brew_cask_install_or_upgrade 'evernote'
-
-fancy_echo "Installing Sequal Pro, for MySQL database management ..."
-  brew_cask_install_or_upgrade 'sequel-pro'
-
 fancy_echo "Installing Box Sync, for file syncing and management ..."
   brew_cask_install_or_upgrade 'box-sync'
 
@@ -214,7 +208,7 @@ fancy_echo "Installing Virtualenv for handling python environments ..."
 
 fancy_echo "Installing z, a command-line tool for quickly changing to often-used directories..."
   brew_install_or_upgrade 'z'
-  append_to_zshrc 'source `brew --prefix`/etc/profile.d/z.sh'
+  append_to_zshrc 'source $(brew --prefix)/etc/profile.d/z.sh'
 
 fancy_echo "Adding Grunt for automated build tasks ..."
   npm install -g grunt-cli
