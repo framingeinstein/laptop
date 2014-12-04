@@ -17,7 +17,7 @@ append_to_zshrc() {
   if [[ -w "$HOME/.zshrc.local" ]]; then
     zshrc="$HOME/.zshrc.local"
   else
-    zshrc="$HOME/.zshrc"
+    zshrc="$HOME/.zshenv"
   fi
 
   if ! grep -Fqs "$text" "$zshrc"; then
@@ -227,7 +227,15 @@ fi
 fancy_echo "Installing dotfiles..."
 
 cd $HOME
-git clone git://github.com/rallygroup/dotfiles.git $HOME/.dotfiles
+
+if [[ ! -d "$HOME/.dotfiles/" ]]; then
+  git clone git://github.com/rallygroup/dotfiles.git $HOME/.dotfiles
+fi
+
+if [[ ! -d "$HOME/.dotfiles/.git" ]]; then
+  cd $HOME/.dotfiles; git remote add origin git://github.com/rallygroup/dotfiles.git
+fi
+
 curl -L https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh | ZSH=~/.dotfiles/zsh sh
 
 env RCRC=$HOME/dotfiles/rcrc rcup -v
