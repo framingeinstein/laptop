@@ -37,7 +37,7 @@ if [[ ! -d "$HOME/.bin/" ]]; then
   mkdir "$HOME/.bin"
 fi
 
-if [[ ! -e "$HOME/.zshrc" ]]; then
+if [[ ! -e "$HOME/.zshrc" ]] && [[ ! -L "$HOME/.zshrc" ]]; then
   touch "$HOME/.zshrc"
 fi
 
