@@ -128,6 +128,9 @@ else
   fancy_echo "Homebrew already installed. Skipping ..."
 fi
 
+fancy_echo "Please provide your administator password to continue."
+sudo -v
+
 fancy_echo "Updating Homebrew formulas ..."
 brew update
 
@@ -229,11 +232,13 @@ fancy_echo "Installing dotfiles..."
 cd $HOME
 
 if [[ ! -d "$HOME/.dotfiles/" ]]; then
-  git clone git://github.com/rallygroup/dotfiles.git $HOME/.dotfiles
+  git clone git@github.com:rallygroup/dotfiles.git $HOME/.dotfiles
 fi
 
 if [[ ! -d "$HOME/.dotfiles/.git" ]]; then
-  cd $HOME/.dotfiles; git remote add origin git://github.com/rallygroup/dotfiles.git
+  cd $HOME/.dotfiles; git remote add origin git@github.com:rallygroup/dotfiles.git
+  git pull origin master
+  cd $HOME
 fi
 
 curl -L https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh | ZSH=~/.dotfiles/zsh sh
