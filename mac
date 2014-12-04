@@ -45,6 +45,20 @@ append_to_zshrc 'export PATH="$HOME/.bin:$PATH"'
 
 append_to_zshrc 'export HOMEBREW_CASK_OPTS="--appdir=/Applications"'
 
+if [[ "$SHELL" != */zsh ]]; then
+  fancy_echo "Changing your shell to zsh ..."
+  chsh -s $(which zsh)
+
+  if [[ -w "$HOME/.zshrc.local" ]]; then
+    zshrc="$HOME/.zshrc.local"
+  else
+    zshrc="$HOME/.zshenv"
+  fi
+  
+  source $zshrc
+fi
+
+
 brew_cask_install_or_upgrade(){
   if brew_cask_is_installed "$1"; then
     fancy_echo "Updating $1..."
@@ -116,11 +130,6 @@ if ! command -v brew >/dev/null; then
     export PATH="/usr/local/bin:$PATH"
 else
   fancy_echo "Homebrew already installed. Skipping ..."
-fi
-
-if [[ "$SHELL" != */zsh ]]; then
-  fancy_echo "Changing your shell to zsh ..."
-  chsh -s $(which zsh)
 fi
 
 fancy_echo "Please provide your administator password to continue."
