@@ -47,6 +47,10 @@ append_to_zshrc 'export PATH="$HOME/.bin:$PATH"'
 
 append_to_zshrc 'export HOMEBREW_CASK_OPTS="--appdir=/Applications"'
 
+fancy_echo "\033[0;32mWelcome! Prepare to have your machine be setup for most awesome developmentness.\033[0m" 
+fancy_echo "Please provide your administator password to continue."
+sudo -v
+
 if [[ "$SHELL" != */zsh ]]; then
   fancy_echo "Changing your shell to zsh ..."
   chsh -s $(which zsh)
