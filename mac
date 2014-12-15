@@ -198,8 +198,11 @@ fancy_echo "Installing Virtualbox, for hosting local virtual machines ..."
 
 fancy_echo "Installing Docker, a tool for managing multiple local dev environments..."
   brew_install_or_upgrade 'boot2docker'
-  ln -sfv /usr/local/opt/boot2docker/*.plist ~/Library/LaunchAgents
-  launchctl load ~/Library/LaunchAgents/homebrew.mxcl.boot2docker.plist
+  if [[ ! -f "$HOME/Library/LaunchAgents/homebrew.mxcl.boot2docker.plist" ]]; then
+    ln -sfv /usr/local/opt/boot2docker/*.plist $HOME/Library/LaunchAgents
+    launchctl load $HOME/Library/LaunchAgents/homebrew.mxcl.boot2docker.plist
+    boot2docker init && boot2docker up
+  fi
   brew_install_or_upgrade 'fig'
   # load boot2docker environment variables if they exist
   $(boot2docker shellinit)
