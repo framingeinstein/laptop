@@ -35,6 +35,14 @@ if [[ ! -d "$HOME/.bin/" ]]; then
   mkdir "$HOME/.bin"
 fi
 
+if [[ ! -d "$HOME/.nvm/" ]]; then
+  mkdir "$HOME/.nvm"
+fi
+
+if [[ ! -d "$HOME/.zsh/" ]]; then
+  mkdir "$HOME/.zsh"
+fi
+
 if [[ ! -e "$HOME/.zshrc" ]] && [[ ! -L "$HOME/.zshrc" ]]; then
   touch "$HOME/.zshrc"
 fi
@@ -188,9 +196,15 @@ fancy_echo "Installing cask, for installing desktop applications from homebrew .
 fancy_echo "Installing Vagrant, for managing local virtual machines ..."
   brew_cask_install_or_upgrade 'vagrant'
 
-fancy_echo "Installing Virtualbox, for storing local virtual machines ..."
+fancy_echo "Installing Virtualbox, for hosting local virtual machines ..."
   brew_cask_install_or_upgrade 'virtualbox'
 
+fancy_echo "Installing Docker, a tool for managing multiple local dev environments..."
+  brew_install_or_upgrade 'boot2docker'
+  brew_install_or_upgrade 'fig'
+  # load boot2docker environment variables if they exist
+  $(boot2docker shellinit)
+  
 fancy_echo "Installing Alfred, for quick-finding applications, files and others ..."
   brew_cask_install_or_upgrade 'alfred'
 
@@ -206,7 +220,7 @@ fancy_echo "Installing NVM, Node.js, and NPM, for running apps and installing Ja
   brew_install_or_upgrade 'nvm'
 
   append_to_zshrc 'export PATH="$PATH:/usr/local/lib/node_modules"'
-  append_to_zshrc 'export NVM_DIR=~/.nvm'
+  append_to_zshrc 'export NVM_DIR=$HOME/.nvm'
   append_to_zshrc 'source $(brew --prefix nvm)/nvm.sh' 1
 
   source $(brew --prefix nvm)/nvm.sh
@@ -231,6 +245,7 @@ fancy_echo "Installing Virtualenv for handling python environments ..."
 fancy_echo "Installing z, a command-line tool for quickly changing to often-used directories..."
   brew_install_or_upgrade 'z'
   append_to_zshrc 'source $(brew --prefix)/etc/profile.d/z.sh'
+  touch $HOME/.z
 
 fancy_echo "Adding Grunt for automated build tasks ..."
   npm install -g grunt-cli
@@ -248,8 +263,6 @@ fi
 
 fancy_echo "Installing dotfiles..."
 
-cd $HOME
-
 if [[ ! -d "$HOME/.dotfiles/" ]]; then
   git clone git@github.com:rallygroup/dotfiles.git $HOME/.dotfiles
 fi
@@ -262,23 +275,24 @@ fi
 
 if [[ ! -f "$HOME/.dotfiles/zsh/oh-my-zsh.sh" ]]; then
   fancy_echo "Installing oh-my-zsh, a great zsh library"
-  curl -L https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh | ZSH=~/.dotfiles/zsh sh
+  export ZSH=$HOME/.zsh
+  curl -L https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh | sh
 fi
 
 env RCRC=$HOME/dotfiles/rcrc rcup
 
 if [[ ! -f $HOME/.bin/wp ]]; then
   fancy_echo "Installing wp-cli, a WordPress command line interface..."
-
+  
   curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
-
   chmod +x wp-cli.phar
   sudo mv wp-cli.phar $HOME/.bin/wp
+
 fi
 
 fancy_echo "Installing your personal additions from ~/.laptop.local ..."
-  if [[ -f ~/.laptop.local ]]; then
-    source ~/.laptop.local
+  if [[ -f $HOME/.laptop.local ]]; then
+    source $HOME/.laptop.local
   fi
 
 fancy_echo "Copying SSH key to clipboard..."
@@ -286,3 +300,6 @@ cat $HOME/.ssh/id_rsa.pub | pbcopy
 
 fancy_echo "\033[0;32mInstall complete ! \033[0m" 
 fancy_echo "\033[0;32mYour public SSH key is now in your clipboard, please paste that into general chat to share with the team. \033[0m"
+
+env zsh
+source $HOME/.zshrc
