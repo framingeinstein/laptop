@@ -33,26 +33,24 @@ whole log file as an attachment.
 What it sets up
 ---------------
 
-* [Bundler] for managing Ruby libraries
+* [Docker] for managing local environments
 * [Exuberant Ctags] for indexing files for vim tab completion
 * [Heroku Toolbelt] for interacting with the Heroku API
 * [Homebrew] for managing operating system libraries
 * [ImageMagick] for cropping and resizing images
 * [Node.js] and [NPM], for running apps and installing JavaScript packages
 * [NVM] for managing versions of Node.js
-* [Postgres] for storing relational data
+* [MySQL] for storing relational data
 * [Qt] for headless JavaScript testing via Capybara Webkit
 * [Rails] gem for writing web applications
 * [Rbenv] for managing versions of Ruby
 * [Redis] for storing key-value data
 * [The Silver Searcher] for finding things in files
-* [Watch] for periodically executing a program and displaying the output
 * [wget] for downloading remote files
 * [Zsh] as your shell
 
-[Bundler]: http://bundler.io/
+[Docker]: http://www.docker.com/
 [Exuberant Ctags]: http://ctags.sourceforge.net/
-[Foreman]: https://github.com/ddollar/foreman
 [gh]: https://github.com/jingweno/gh
 [Heroku Toolbelt]: https://toolbelt.heroku.com/
 [Homebrew]: http://brew.sh/
@@ -60,8 +58,7 @@ What it sets up
 [Node.js]: http://nodejs.org/
 [NPM]: https://www.npmjs.org/
 [NVM]: https://github.com/creationix/nvm
-[Parity]: https://github.com/croaky/parity
-[Postgres]: http://www.postgresql.org/
+[MySQL]: http://www.mysql.org/
 [Qt]: http://qt-project.org/
 [Rails]: http://rubyonrails.org/
 [Rbenv]: https://github.com/sstephenson/rbenv
@@ -70,7 +67,6 @@ What it sets up
 [Ruby]: https://www.ruby-lang.org/en/
 [The Silver Searcher]: https://github.com/ggreer/the_silver_searcher
 [wget]: https://www.gnu.org/software/wget
-[Watch]: http://linux.die.net/man/1/watch
 [Zsh]: http://www.zsh.org/
 
 It should take less than 15 minutes to install (depends on your machine).
