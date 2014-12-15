@@ -201,8 +201,10 @@ fancy_echo "Installing Docker, a tool for managing multiple local dev environmen
   if [[ ! -f "$HOME/Library/LaunchAgents/homebrew.mxcl.boot2docker.plist" ]]; then
     ln -sfv /usr/local/opt/boot2docker/*.plist $HOME/Library/LaunchAgents
     launchctl load $HOME/Library/LaunchAgents/homebrew.mxcl.boot2docker.plist
-    boot2docker init && boot2docker up
   fi
+
+  boot2docker init && boot2docker up
+  
   brew_install_or_upgrade 'fig'
   # load boot2docker environment variables if they exist
   $(boot2docker shellinit)
