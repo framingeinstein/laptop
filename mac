@@ -304,4 +304,5 @@ cat $HOME/.ssh/id_rsa.pub | pbcopy
 fancy_echo "\033[0;32mInstall complete ! \033[0m" 
 fancy_echo "\033[0;32mYour public SSH key is now in your clipboard, please paste that into general chat to share with the team. \033[0m"
 
+env zsh
 source $HOME/.zshrc
