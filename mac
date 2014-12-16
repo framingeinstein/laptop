@@ -146,6 +146,8 @@ brew_launchctl_restart() {
   launchctl load "$HOME/Library/LaunchAgents/$plist" >/dev/null
 }
 
+fancy_echo "Enabling local ssh remote access ..."
+  sudo systemsetup -setremotelogin on
 
 if ! command -v brew >/dev/null; then
   fancy_echo "Installing Homebrew, a good OS X package manager ..."
@@ -160,7 +162,6 @@ fi
 
 fancy_echo "Updating Homebrew formulas ..."
 brew update
-
 
 fancy_echo "Installing MySQL, the most-used open source relational database for PHP projects ..."
   brew_install_or_upgrade 'mysql'
@@ -198,10 +199,8 @@ fancy_echo "Installing Virtualbox, for hosting local virtual machines ..."
 
 fancy_echo "Installing Docker, a tool for managing multiple local dev environments..."
   brew_install_or_upgrade 'boot2docker'
-  if [[ ! -f "$HOME/Library/LaunchAgents/homebrew.mxcl.boot2docker.plist" ]]; then
-    ln -sfv /usr/local/opt/boot2docker/*.plist $HOME/Library/LaunchAgents
-    launchctl load $HOME/Library/LaunchAgents/homebrew.mxcl.boot2docker.plist
-  fi
+
+  brew_launchctl_restart 'boot2docker'
 
   boot2docker init && boot2docker up
   
