@@ -283,7 +283,8 @@ fi
 if [[ ! -f "$HOME/.dotfiles/zsh/oh-my-zsh.sh" ]]; then
   fancy_echo "Installing oh-my-zsh, a great zsh library"
   export ZSH=$HOME/.zsh
-  curl -L https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh | sh
+  # skipping robbyrussell's install script until this pull request is merged https://github.com/robbyrussell/oh-my-zsh/pull/3353/commits
+  curl -L https://raw.github.com/sxalexander/oh-my-zsh/master/tools/install.sh | sh
 fi
 
 env RCRC=$HOME/dotfiles/rcrc rcup
