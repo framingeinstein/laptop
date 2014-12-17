@@ -147,7 +147,7 @@ brew_launchctl_restart() {
 }
 
 fancy_echo "Enabling local ssh remote access ..."
-  sudo systemsetup -setremotelogin on
+  sudo systemsetup -setremotelogin on 2>&1 >/dev/null
 
 if [[ ! $* == *--no-homebrew* ]]; then
 
