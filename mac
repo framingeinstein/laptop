@@ -149,120 +149,124 @@ brew_launchctl_restart() {
 fancy_echo "Enabling local ssh remote access ..."
   sudo systemsetup -setremotelogin on
 
-if ! command -v brew >/dev/null; then
-  fancy_echo "Installing Homebrew, a good OS X package manager ..."
-    ruby <(curl -fsS https://raw.githubusercontent.com/Homebrew/install/master/install)
+if [[ ! $* == *--no-homebrew* ]]; then
 
-    append_to_zshrc '# recommended by brew doctor'
-    append_to_zshrc 'export PATH="/usr/local/bin:$PATH"' 1
-    export PATH="/usr/local/bin:$PATH"
-else
-  fancy_echo "Homebrew already installed. Skipping ..."
-fi
+  if ! command -v brew >/dev/null; then
+    fancy_echo "Installing Homebrew, a good OS X package manager ..."
+      ruby <(curl -fsS https://raw.githubusercontent.com/Homebrew/install/master/install)
 
-fancy_echo "Updating Homebrew formulas ..."
-brew update
+      append_to_zshrc '# recommended by brew doctor'
+      append_to_zshrc 'export PATH="/usr/local/bin:$PATH"' 1
+      export PATH="/usr/local/bin:$PATH"
+  else
+    fancy_echo "Homebrew already installed. Skipping ..."
+  fi
 
-fancy_echo "Installing MySQL, the most-used open source relational database for PHP projects ..."
-  brew_install_or_upgrade 'mysql'
+  fancy_echo "Updating Homebrew formulas ..."
+  brew update
 
-fancy_echo "Installing Redis, a good key-value database ..."
-  brew_install_or_upgrade 'redis'
+  fancy_echo "Installing MySQL, the most-used open source relational database for PHP projects ..."
+    brew_install_or_upgrade 'mysql'
 
-fancy_echo "Installing The Silver Searcher (better than ack or grep) to search the contents of files ..."
-  brew_install_or_upgrade 'the_silver_searcher'
+  fancy_echo "Installing Redis, a good key-value database ..."
+    brew_install_or_upgrade 'redis'
 
-fancy_echo "Installing wget to download remote files ..."
-  brew_install_or_upgrade 'the_silver_searcher'
+  fancy_echo "Installing The Silver Searcher (better than ack or grep) to search the contents of files ..."
+    brew_install_or_upgrade 'the_silver_searcher'
 
-fancy_echo "Installing vim from Homebrew to get the latest version ..."
-  brew_install_or_upgrade 'vim'
+  fancy_echo "Installing wget to download remote files ..."
+    brew_install_or_upgrade 'the_silver_searcher'
 
-fancy_echo "Installing ctags, to index files for vim tab completion of methods, classes, variables ..."
-  brew_install_or_upgrade 'ctags'
+  fancy_echo "Installing vim from Homebrew to get the latest version ..."
+    brew_install_or_upgrade 'vim'
 
-fancy_echo "Installing ImageMagick, to crop and resize images ..."
-  brew_install_or_upgrade 'imagemagick'
+  fancy_echo "Installing ctags, to index files for vim tab completion of methods, classes, variables ..."
+    brew_install_or_upgrade 'ctags'
 
-fancy_echo "Installing QT, used by Capybara Webkit for headless Javascript integration testing ..."
-  brew_install_or_upgrade 'qt'
+  fancy_echo "Installing ImageMagick, to crop and resize images ..."
+    brew_install_or_upgrade 'imagemagick'
 
-fancy_echo "Installing cask, for installing desktop applications from homebrew ..."
-  brew tap caskroom/cask
-  brew_install_or_upgrade 'brew-cask'
+  fancy_echo "Installing QT, used by Capybara Webkit for headless Javascript integration testing ..."
+    brew_install_or_upgrade 'qt'
 
-fancy_echo "Installing Vagrant, for managing local virtual machines ..."
-  brew_cask_install_or_upgrade 'vagrant'
+  fancy_echo "Installing cask, for installing desktop applications from homebrew ..."
+    brew tap caskroom/cask
+    brew_install_or_upgrade 'brew-cask'
 
-fancy_echo "Installing Virtualbox, for hosting local virtual machines ..."
-  brew_cask_install_or_upgrade 'virtualbox'
+  fancy_echo "Installing Vagrant, for managing local virtual machines ..."
+    brew_cask_install_or_upgrade 'vagrant'
 
-fancy_echo "Installing Docker, a tool for managing multiple local dev environments..."
-  brew_install_or_upgrade 'boot2docker'
+  fancy_echo "Installing Virtualbox, for hosting local virtual machines ..."
+    brew_cask_install_or_upgrade 'virtualbox'
 
-  brew_launchctl_restart 'boot2docker'
+  fancy_echo "Installing Docker, a tool for managing multiple local dev environments..."
+    brew_install_or_upgrade 'boot2docker'
 
-  boot2docker init && boot2docker up
-  
-  brew_install_or_upgrade 'fig'
-  # load boot2docker environment variables if they exist
-  $(boot2docker shellinit)
-  
-fancy_echo "Installing Alfred, for quick-finding applications, files and others ..."
-  brew_cask_install_or_upgrade 'alfred'
+    brew_launchctl_restart 'boot2docker'
 
-fancy_echo "Installing Hipchat, for chatty-chatting ..."
-  brew_cask_install_or_upgrade 'hipchat'
+    boot2docker init && boot2docker up
+    
+    brew_install_or_upgrade 'fig'
+    # load boot2docker environment variables if they exist
+    $(boot2docker shellinit)
+    
+  fancy_echo "Installing Alfred, for quick-finding applications, files and others ..."
+    brew_cask_install_or_upgrade 'alfred'
 
-fancy_echo "Installing Box Sync, for file syncing and management ..."
-  brew_cask_install_or_upgrade 'box-sync'
+  fancy_echo "Installing Hipchat, for chatty-chatting ..."
+    brew_cask_install_or_upgrade 'hipchat'
 
-node_version="0.10.33"
+  fancy_echo "Installing Box Sync, for file syncing and management ..."
+    brew_cask_install_or_upgrade 'box-sync'
 
-fancy_echo "Installing NVM, Node.js, and NPM, for running apps and installing JavaScript packages ..."
-  brew_install_or_upgrade 'nvm'
+  node_version="0.10.33"
 
-  append_to_zshrc 'export PATH="$PATH:/usr/local/lib/node_modules"'
-  append_to_zshrc 'export NVM_DIR=$HOME/.nvm'
-  append_to_zshrc 'source $(brew --prefix nvm)/nvm.sh' 1
+  fancy_echo "Installing NVM, Node.js, and NPM, for running apps and installing JavaScript packages ..."
+    brew_install_or_upgrade 'nvm'
 
-  source $(brew --prefix nvm)/nvm.sh
-  nvm install "$node_version"
+    append_to_zshrc 'export PATH="$PATH:/usr/local/lib/node_modules"'
+    append_to_zshrc 'export NVM_DIR=$HOME/.nvm'
+    append_to_zshrc 'source $(brew --prefix nvm)/nvm.sh' 1
 
-  fancy_echo "Setting $node_version as the global default nodejs..."
-  nvm alias default "$node_version"
+    source $(brew --prefix nvm)/nvm.sh
+    nvm install "$node_version"
 
-fancy_echo "Upgrading and linking OpenSSL ..."
-  brew_install_or_upgrade 'openssl'
-  brew unlink openssl && brew link openssl --force
+    fancy_echo "Setting $node_version as the global default nodejs..."
+    nvm alias default "$node_version"
 
-fancy_echo "Installing Python..."
-  brew_install_or_upgrade 'python'
+  fancy_echo "Upgrading and linking OpenSSL ..."
+    brew_install_or_upgrade 'openssl'
+    brew unlink openssl && brew link openssl --force
 
-fancy_echo "Installing Fabric for managing projects and environments ..."
-  pip install fabric
+  fancy_echo "Installing Python..."
+    brew_install_or_upgrade 'python'
 
-fancy_echo "Installing Virtualenv for handling python environments ..."
-  pip install virtualenv virtualenvwrapper
+  fancy_echo "Installing Fabric for managing projects and environments ..."
+    pip install fabric
 
-fancy_echo "Installing z, a command-line tool for quickly changing to often-used directories..."
-  brew_install_or_upgrade 'z'
-  append_to_zshrc 'source $(brew --prefix)/etc/profile.d/z.sh'
-  touch $HOME/.z
+  fancy_echo "Installing Virtualenv for handling python environments ..."
+    pip install virtualenv virtualenvwrapper
 
-fancy_echo "Adding Grunt for automated build tasks ..."
-  npm install -g grunt-cli
+  fancy_echo "Installing z, a command-line tool for quickly changing to often-used directories..."
+    brew_install_or_upgrade 'z'
+    append_to_zshrc 'source $(brew --prefix)/etc/profile.d/z.sh'
+    touch $HOME/.z
 
-fancy_echo "Installing Heroku CLI for managing Heroku apps and Foreman for managing app processes ..."
-  brew_install_or_upgrade 'heroku-toolbelt'
+  fancy_echo "Adding Grunt for automated build tasks ..."
+    npm install -g grunt-cli
 
-if ! command -v rcup >/dev/null; then
-  fancy_echo "Installing rcm, to manage your dotfiles ..."
-    brew tap thoughtbot/formulae
-    brew_install_or_upgrade 'rcm'
-else
-  fancy_echo "rcm already installed. Skipping ..."
-fi
+  fancy_echo "Installing Heroku CLI for managing Heroku apps and Foreman for managing app processes ..."
+    brew_install_or_upgrade 'heroku-toolbelt'
+
+  if ! command -v rcup >/dev/null; then
+    fancy_echo "Installing rcm, to manage your dotfiles ..."
+      brew tap thoughtbot/formulae
+      brew_install_or_upgrade 'rcm'
+  else
+    fancy_echo "rcm already installed. Skipping ..."
+  fi
+
+fi  # --no-homebrew
 
 fancy_echo "Installing dotfiles..."
 
@@ -271,7 +275,7 @@ if [[ ! -d "$HOME/.dotfiles/" ]]; then
 fi
 
 if [[ ! -d "$HOME/.dotfiles/.git" ]]; then
-  cd $HOME/.dotfiles; git remote add origin git@github.com:rallygroup/dotfiles.git
+  cd $HOME/.dotfiles; git remote add origin https://github.com/rallygroup/dotfiles.git
   git pull origin master
   cd $HOME
 fi
