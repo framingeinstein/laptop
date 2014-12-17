@@ -204,6 +204,8 @@ if [[ ! $* == *--no-homebrew* ]]; then
 
     brew_launchctl_restart 'boot2docker'
 
+    # hack, installs a specific boot2docker iso
+    boot2docker download --iso-url=https://github.com/boot2docker/boot2docker/releases/download/v1.3.3/boot2docker.iso
     boot2docker init && boot2docker up
     
     brew_install_or_upgrade 'fig'
