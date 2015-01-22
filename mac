@@ -202,7 +202,7 @@ if [[ ! $* == *--no-homebrew* ]]; then
   fancy_echo "Installing Docker, a tool for managing multiple local dev environments..."
     brew_install_or_upgrade 'boot2docker'
 
-    brew link boot2docker
+    brew unlink boot2docker && brew link boot2docker
     
     brew_launchctl_restart 'boot2docker'
 
