@@ -1,8 +1,17 @@
 #!/usr/bin/env bash
 
-# Welcome to the thoughtbot laptop script!
+# Welcome to the rally laptop script! (inspired by thoughtbot)
 # Be prepared to turn your laptop (or desktop, no haters here)
 # into an awesome development machine.
+
+cache_sudo_credentials(){
+  # cache sudo permissions for later
+  CAN_I_RUN_SUDO=$(sudo -n uptime 2>&1|grep "load"|wc -l)
+  if [ ${CAN_I_RUN_SUDO} == 0 ]; then
+    fancy_echo "Please provide your administator password to continue."
+    sudo -v
+  fi
+}
 
 fancy_echo() {
   printf "\n%b\n" "$1"
@@ -56,8 +65,8 @@ append_to_zshrc 'export PATH="$HOME/.bin:$PATH"'
 append_to_zshrc 'export HOMEBREW_CASK_OPTS="--appdir=/Applications"'
 
 fancy_echo "\033[0;32mWelcome! Prepare to have your machine be setup for most awesome developmentness.\033[0m" 
-fancy_echo "Please provide your administator password to continue."
-sudo -v
+
+cache_sudo_credentials
 
 if [[ ! -f $HOME/.ssh/id_rsa ]]; then
   fancy_echo "Generating SSH key..."
@@ -106,6 +115,8 @@ brew_cask_expand_alias() {
 
 
 brew_install_or_upgrade() {
+  cache_sudo_credentials
+
   if brew_is_installed "$1"; then
     if brew_is_upgradable "$1"; then
       brew upgrade "$@"
@@ -165,11 +176,11 @@ if [[ ! $* == *--no-homebrew* ]]; then
   fancy_echo "Updating Homebrew formulas ..."
   brew update
 
-  fancy_echo "Installing MySQL, the most-used open source relational database for PHP projects ..."
-    brew_install_or_upgrade 'mysql'
+  # fancy_echo "Installing MySQL, the most-used open source relational database for PHP projects ..."
+  #   brew_install_or_upgrade 'mysql'
 
-  fancy_echo "Installing Redis, a good key-value database ..."
-    brew_install_or_upgrade 'redis'
+  # fancy_echo "Installing Redis, a good key-value database ..."
+  #   brew_install_or_upgrade 'redis'
 
   fancy_echo "Installing The Silver Searcher (better than ack or grep) to search the contents of files ..."
     brew_install_or_upgrade 'the_silver_searcher'
@@ -193,11 +204,11 @@ if [[ ! $* == *--no-homebrew* ]]; then
     brew tap caskroom/cask
     brew_install_or_upgrade 'brew-cask'
 
-  fancy_echo "Installing Vagrant, for managing local virtual machines ..."
-    brew_cask_install_or_upgrade 'vagrant'
+  # fancy_echo "Installing Vagrant, for managing local virtual machines ..."
+  #   brew_cask_install_or_upgrade 'vagrant'
 
-  fancy_echo "Installing Virtualbox, for hosting local virtual machines ..."
-    brew_cask_install_or_upgrade 'virtualbox'
+  # fancy_echo "Installing Virtualbox, for hosting local virtual machines ..."
+  #   brew_cask_install_or_upgrade 'virtualbox'
 
   fancy_echo "Installing Docker, a tool for managing multiple local dev environments..."
     brew_install_or_upgrade 'boot2docker'
@@ -208,7 +219,9 @@ if [[ ! $* == *--no-homebrew* ]]; then
 
     boot2docker init && boot2docker up
     
-    brew_install_or_upgrade 'fig'
+    curl -L https://github.com/docker/compose/releases/download/1.1.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+    chmod +x /usr/local/bin/docker-compose
+    
     # load boot2docker environment variables if they exist
     $(boot2docker shellinit)
     
@@ -221,7 +234,7 @@ if [[ ! $* == *--no-homebrew* ]]; then
   fancy_echo "Installing Box Sync, for file syncing and management ..."
     brew_cask_install_or_upgrade 'box-sync'
 
-  node_version="0.10.33"
+  node_version="0.10.36"
 
   fancy_echo "Installing NVM, Node.js, and NPM, for running apps and installing JavaScript packages ..."
     brew_install_or_upgrade 'nvm'
@@ -233,6 +246,8 @@ if [[ ! $* == *--no-homebrew* ]]; then
     source $(brew --prefix nvm)/nvm.sh
     nvm install "$node_version"
 
+    npm install -g npm@latest
+
     fancy_echo "Setting $node_version as the global default nodejs..."
     nvm alias default "$node_version"
 
@@ -240,8 +255,8 @@ if [[ ! $* == *--no-homebrew* ]]; then
     brew_install_or_upgrade 'openssl'
     brew unlink openssl && brew link openssl --force
 
-  fancy_echo "Installing Python..."
-    brew_install_or_upgrade 'python'
+  # fancy_echo "Installing Python..."
+  #   brew_install_or_upgrade 'python'
 
   fancy_echo "Installing Fabric for managing projects and environments ..."
     pip install fabric
@@ -254,10 +269,21 @@ if [[ ! $* == *--no-homebrew* ]]; then
     append_to_zshrc 'source $(brew --prefix)/etc/profile.d/z.sh'
     touch $HOME/.z
 
+  fancy_echo "Adding dnsmasq, for dynamic local dns rules ..."
+    brew_install_or_upgrade 'dnsmasq'
+    sudo cp -fv /usr/local/opt/dnsmasq/*.plist /Library/LaunchDaemons
+    sudo chown root /Library/LaunchDaemons/homebrew.mxcl.dnsmasq.plist
+    sudo launchctl load /Library/LaunchDaemons/homebrew.mxcl.dnsmasq.plist
+    [ -d $(brew --prefix)/etc/dnsmasq.d/ ] || mkdir -p $(brew --prefix)/etc/dnsmasq.d
+    echo "listen-address=127.0.0.1\nbind-interfaces\nconf-dir=$(brew --prefix)/etc/dnsmasq.d/" > $(brew --prefix)/etc/dnsmasq.conf
+    # wildcard dns matching for local domains
+    echo 'address=/.dev/127.0.0.1' > $(brew --prefix)/etc/dnsmasq.d/dev.conf
+    sudo bash -c 'echo "nameserver 127.0.0.1" > /etc/resolver/dev'
+
   fancy_echo "Adding Grunt for automated build tasks ..."
     npm install -g grunt-cli
 
-  fancy_echo "Installing Heroku CLI for managing Heroku apps and Foreman for managing app processes ..."
+  fancy_echo "Installing Heroku CLI for managing Heroku apps for managing app processes ..."
     brew_install_or_upgrade 'heroku-toolbelt'
 
   if ! command -v rcup >/dev/null; then
