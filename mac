@@ -259,7 +259,7 @@ if [[ ! $* == *--no-homebrew* ]]; then
   #   brew_install_or_upgrade 'python'
 
   fancy_echo "Installing Fabric for managing projects and environments ..."
-    pip install fabric
+    sudo pip install fabric
 
   fancy_echo "Installing Virtualenv for handling python environments ..."
     pip install virtualenv virtualenvwrapper
